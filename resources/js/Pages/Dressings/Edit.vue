@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/Components/Base/VButton.vue';
 import VInput from '@/Components/Base/VInput.vue';
+import VNumberInput from '@/Components/Base/VNumberInput.vue';
 import DressingColorSelector from '@/Components/Dressing/DressingColorSelector.vue';
 import InputError from '@/Components/InputError.vue';
 import Modal from '@/Components/Modal.vue';
@@ -61,7 +62,7 @@ const closeModal = () => {
         </template>
 
         <form
-            class="mx-auto mt-auto flex w-full max-w-lg flex-col gap-8"
+            class="mx-auto mt-auto flex w-full max-w-lg flex-col py-8"
             @submit.prevent="submit"
         >
             <div>
@@ -71,22 +72,27 @@ const closeModal = () => {
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
 
-            <div>
+            <div class="mt-4">
                 <label>{{ $t('couleur') }}</label>
                 <DressingColorSelector class="mt-1" v-model="form.color" />
             </div>
 
-            <div>
-                <p class="mb-2">{{ $t('minimum_de_vtement_par_catgorie') }}</p>
+            <div class="mt-12">
+                <p class="text-xl">
+                    {{ $t('minimum_de_vtement_par_catgorie') }}
+                </p>
+                <p class="mt-2">
+                    {{
+                        $t('dfinit_le_minimum_de_vtement_quil_te_faut_dans_ce')
+                    }}
+                </p>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div v-for="(min, categoryId) in form.clothesMinByCategory">
-                        <label class="text-sm">{{
-                            clothesCategories.name(categoryId)
-                        }}</label>
-                        <VInput
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <div v-for="(name, categoryId) in clothesCategories.all">
+                        <label class="text-sm">{{ name }}</label>
+                        <VNumberInput
                             class="w-full"
-                            type="number"
+                            :min="0"
                             v-model="form.clothesMinByCategory[categoryId]"
                         />
                     </div>
@@ -94,6 +100,7 @@ const closeModal = () => {
             </div>
 
             <VButton
+                class="mt-12"
                 type="submit"
                 :disabled="form.processing"
                 :loading="form.processing"

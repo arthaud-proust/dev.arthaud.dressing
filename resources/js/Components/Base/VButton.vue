@@ -33,11 +33,13 @@ const props = withDefaults(
         disabled?: boolean;
         loading?: boolean;
         external?: boolean;
+        rounded?: boolean;
         icon?: boolean;
         small?: boolean;
         padded?: boolean;
     }>(),
     {
+        rounded: true,
         type: 'button',
         variant: 'primary',
         padded: true,
@@ -45,7 +47,7 @@ const props = withDefaults(
 );
 
 const roundedClasses = computed(() => {
-    if (props.icon) return 'rounded-full';
+    if (props.icon && props.rounded) return 'rounded-full';
     return props.small ? 'rounded-md' : 'rounded-lg';
 });
 

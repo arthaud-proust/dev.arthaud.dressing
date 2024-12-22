@@ -46,16 +46,23 @@ class DressingTest extends TestCase
     public function test_can_create_dressing(): void
     {
         $user = User::factory()->create();
+        $clothesCategory = ClothesCategory::factory()->for($user)->create();
 
         $response = $this
             ->actingAs($user)
             ->post('/dressings', [
                 'name' => 'Home',
                 'color' => DressingColor::AMBER->value,
+                'clothesMinByCategory' => [
+                    (string) $clothesCategory->id => 10,
+                ],
             ]);
 
         $dressing = Dressing::first();
         $this->assertNotNull($dressing);
+        $this->assertSame('Home', $dressing->name);
+        $this->assertSame(DressingColor::AMBER, $dressing->color);
+        $this->assertSame(10, $dressing->clothesCategoryRequirements()->firstWhere('dressing_id', $dressing->id)->min);
         $response->assertRedirect("/dressings/$dressing->id");
     }
 

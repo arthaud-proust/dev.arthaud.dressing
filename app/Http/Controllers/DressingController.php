@@ -23,7 +23,18 @@ class DressingController extends Controller
 
     public function store(StoreDressingRequest $request): RedirectResponse
     {
-        $dressing = $request->user()->dressings()->create($request->validated());
+        $validated = $request->validated();
+
+        $dressing = $request->user()->dressings()->create([
+            'name' => $validated['name'],
+            'color' => $validated['color'],
+        ]);
+
+        foreach ($validated['clothesMinByCategory'] as $categoryId => $min) {
+            $dressing->clothesCategoryRequirements()->where('clothes_category_id', $categoryId)->update([
+                'min' => $min,
+            ]);
+        }
 
         return redirect()
             ->route('dressings.show', $dressing)
