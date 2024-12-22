@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/Components/Base/VButton.vue';
 import VInput from '@/Components/Base/VInput.vue';
+import VStretchedButton from '@/Components/Base/VStretchedButton.vue';
 import Modal from '@/Components/Modal.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -45,20 +46,18 @@ const createClothesCategory = () => {
         </template>
 
         <div class="mx-auto mt-auto flex w-full max-w-lg flex-col gap-2 py-16">
-            <article
+            <VStretchedButton
                 v-for="clothesCategory in clothesCategories"
-                class="flex items-center gap-2 rounded-lg bg-amber-50 p-4"
+                :sr-text="clothesCategory.name"
+                :href="route('clothes-categories.edit', clothesCategory)"
             >
-                <h2 class="text-xl">{{ clothesCategory.name }}</h2>
-                <VButton
-                    :href="route('clothes-categories.edit', clothesCategory)"
-                    class="ml-auto"
-                    icon
-                    small
+                <article
+                    class="flex items-center gap-2 rounded-lg bg-amber-50 p-4 font-bold text-amber-900"
                 >
-                    <PencilIcon class="size-5" />
-                </VButton>
-            </article>
+                    <h2 class="text-xl">{{ clothesCategory.name }}</h2>
+                    <PencilIcon class="ml-auto size-5" />
+                </article>
+            </VStretchedButton>
         </div>
 
         <Modal v-if="isModalCreateOpened" @close="closeModalCreate">
