@@ -6,7 +6,10 @@ use App\Models\ClothesCategory;
 use App\Models\Clothing;
 use App\Models\Dressing;
 use App\Models\User;
+use App\UX\Parcours\EmptyUserParcours;
+use App\UX\Parcours\SuitcaseParcours;
 use Illuminate\Database\Seeder;
+use function collect;
 use function config;
 use function fake;
 
@@ -17,8 +20,10 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
+    public function run(
+        SuitcaseParcours $suitcaseParcours,
+        EmptyUserParcours $emptyUserParcours
+    ): void {
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => config('app.test_user.email'),
@@ -69,5 +74,8 @@ class DatabaseSeeder extends Seeder
                 ->count(fake()->numberBetween(1, 3))
                 ->create();
         }
+
+        $suitcaseParcours->setup();
+        $emptyUserParcours->setup();
     }
 }
