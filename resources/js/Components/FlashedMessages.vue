@@ -44,10 +44,11 @@ watch(
 <template>
     <Teleport to="body">
         <div
-            class="fixed left-4 right-4 top-4 z-50 flex flex-col items-center gap-2"
+            class="pointer-events-none fixed left-4 right-4 top-4 z-50 flex flex-col items-center gap-2"
             v-if="toasts.size"
         >
             <VToast
+                class="pointer-events-auto"
                 v-for="[id, toast] in toasts.entries()"
                 :key="id"
                 :content="toast.content"
