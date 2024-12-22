@@ -1,32 +1,15 @@
 <script setup lang="ts">
 import VButton from '@/Components/Base/VButton.vue';
-import VInput from '@/Components/Base/VInput.vue';
 import VStretchedButton from '@/Components/Base/VStretchedButton.vue';
-import Modal from '@/Components/Modal.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ClothesCategoryDto } from '@/types/generated';
 import { PencilIcon, PlusIcon } from '@heroicons/vue/24/solid';
-import { Head, useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
 
 const props = defineProps<{
     clothesCategories: Array<ClothesCategoryDto>;
 }>();
-
-const isModalCreateOpened = ref(false);
-const clothesCategoryForm = useForm({
-    name: '',
-});
-
-const openModalCreate = () => (isModalCreateOpened.value = true);
-const closeModalCreate = () => (isModalCreateOpened.value = false);
-
-const createClothesCategory = () => {
-    clothesCategoryForm.post(route('clothes-categories.store'), {
-        onSuccess: closeModalCreate,
-    });
-};
 </script>
 
 <template>
@@ -38,7 +21,7 @@ const createClothesCategory = () => {
                 :back-to="route('dashboard')"
                 :title="$t('catgories_de_vtements')"
             >
-                <VButton @click="openModalCreate">
+                <VButton :href="route('clothes-categories.create')">
                     <PlusIcon class="size-5" />
                     {{ $t('creer') }}
                 </VButton>
@@ -59,29 +42,5 @@ const createClothesCategory = () => {
                 </article>
             </VStretchedButton>
         </div>
-
-        <Modal v-if="isModalCreateOpened" @close="closeModalCreate">
-            <form class="space-y-4" @submit.prevent="createClothesCategory">
-                <h2 class="text-2xl">{{ $t('crer_une_catgorie') }}</h2>
-
-                <VInput v-model="clothesCategoryForm.name" />
-
-                <div class="flex gap-2">
-                    <VButton
-                        class="grow"
-                        @click="closeModalCreate"
-                        variant="tertiary"
-                        >{{ $t('annuler') }}
-                    </VButton>
-                    <VButton
-                        class="grow"
-                        type="submit"
-                        :loading="clothesCategoryForm.processing"
-                        :disabled="clothesCategoryForm.processing"
-                        >{{ $t('creer') }}
-                    </VButton>
-                </div>
-            </form>
-        </Modal>
     </AuthenticatedLayout>
 </template>

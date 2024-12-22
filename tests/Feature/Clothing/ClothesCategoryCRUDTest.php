@@ -17,11 +17,15 @@ class ClothesCategoryCRUDTest extends TestCase
     public function test_can_create_clothes_category(): void
     {
         $user = User::factory()->create();
+        $dressing = Dressing::factory()->for($user)->create();
 
         $response = $this
             ->actingAs($user)
             ->post("/clothes-categories", [
                 'name' => 'T-shirts',
+                'clothesMinByDressing' => [
+                    (string) $dressing->id => 10,
+                ],
             ]);
 
         $response->assertSessionDoesntHaveErrors();
@@ -29,6 +33,9 @@ class ClothesCategoryCRUDTest extends TestCase
 
         $this->assertDatabaseHas(ClothesCategory::class, [
             'name' => 'T-shirts',
+        ]);
+        $this->assertDatabaseHas(ClothesCategoryRequirement::class, [
+            'min' => 10,
         ]);
     }
 
@@ -53,6 +60,7 @@ class ClothesCategoryCRUDTest extends TestCase
     public function test_can_update_clothes_category(): void
     {
         $user = User::factory()->create();
+        $dressing = Dressing::factory()->for($user)->create();
         $clothesCategory = ClothesCategory::factory()->for($user)->create([
             'name' => 'T-shirts',
         ]);
@@ -61,7 +69,9 @@ class ClothesCategoryCRUDTest extends TestCase
             ->actingAs($user)
             ->put("/clothes-categories/$clothesCategory->id", [
                 'name' => 'Pantalons',
-                'clothesMinByDressing' => [],
+                'clothesMinByDressing' => [
+                    (string) $dressing->id => 10,
+                ],
             ]);
 
         $response->assertSessionDoesntHaveErrors();
@@ -69,6 +79,9 @@ class ClothesCategoryCRUDTest extends TestCase
 
         $this->assertDatabaseHas(ClothesCategory::class, [
             'name' => 'Pantalons',
+        ]);
+        $this->assertDatabaseHas(ClothesCategoryRequirement::class, [
+            'min' => 10,
         ]);
     }
 

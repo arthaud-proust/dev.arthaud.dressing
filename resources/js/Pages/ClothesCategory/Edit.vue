@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/Components/Base/VButton.vue';
 import VInput from '@/Components/Base/VInput.vue';
+import VNumberInput from '@/Components/Base/VNumberInput.vue';
 import InputError from '@/Components/InputError.vue';
 import Modal from '@/Components/Modal.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
@@ -69,18 +70,24 @@ const closeModal = () => {
             </div>
 
             <div>
-                <p class="mb-2">{{ $t('minimum_de_vtement_par_dressing') }}</p>
+                <p class="text-xl">
+                    {{ $t('minimum_de_vtement_par_dressing') }}
+                </p>
+                <p class="mt-2">
+                    {{
+                        $t('dfinit_le_minimum_de_vtement_quil_te_faut_dans_ce')
+                    }}
+                </p>
 
-                <div class="grid grid-cols-2 gap-2">
+                <div class="mt-4 grid grid-cols-2 gap-2">
                     <div v-for="(min, dressingId) in form.clothesMinByDressing">
                         <label class="text-sm">{{
                             dressings.find(
                                 (d) => d.id === Number.parseInt(dressingId),
                             )?.name
                         }}</label>
-                        <VInput
-                            class="w-full"
-                            type="number"
+                        <VNumberInput
+                            :min="0"
                             v-model="form.clothesMinByDressing[dressingId]"
                         />
                     </div>

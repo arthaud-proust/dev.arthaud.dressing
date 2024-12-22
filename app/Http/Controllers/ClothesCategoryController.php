@@ -24,11 +24,28 @@ class ClothesCategoryController extends Controller
         ]);
     }
 
+    public function create(Request $request): Response
+    {
+        return Inertia::render('ClothesCategory/Create', [
+            'dressings' => DressingDto::collect($request->user()->dressings),
+        ]);
+    }
+
     public function store(StoreClothingCategoryRequest $request): RedirectResponse
     {
         Gate::authorize('create', ClothesCategory::class);
 
-        $clothesCategory = $request->user()->clothesCategories()->create($request->validated());
+        $validated = $request->validated();
+
+        $clothesCategory = $request->user()->clothesCategories()->create([
+            'name' => $validated['name'],
+        ]);
+
+        foreach ($validated['clothesMinByDressing'] as $dressingId => $min) {
+            $clothesCategory->clothesCategoryRequirements()->where('dressing_id', $dressingId)->update([
+                'min' => $min,
+            ]);
+        }
 
         return redirect()
             ->route('clothes-categories.index')
