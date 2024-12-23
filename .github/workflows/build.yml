@@ -42,11 +42,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Run make deploy via ssh
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy
+        uses: fjogeleit/http-request-action@v1
         with:
-          host: ${{ secrets.DEPLOY_SSH_HOST }}
-          username: ${{ secrets.DEPLOY_SSH_USERNAME }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_SSH_PORT }}
-          script: ${{ secrets.DEPLOY_SSH_SCRIPT }}
+          method: 'POST'
+          url: ${{ secrets.DEPLOY_URL }}
+          bearerToken: ${{ secrets.DEPLOY_TOKEN }}
+          maskResponse: true
+          retry: 3
+          retryWait: 5000
