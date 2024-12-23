@@ -105,6 +105,8 @@ return [
         ),
     ],
 
+    'deploy-token' => env('APP_DEPLOY_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver

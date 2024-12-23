@@ -1,3 +1,5 @@
+test:
+	echo "ok" >> test.txt
 deploy:
 	php artisan down
 	git fetch
