@@ -36,18 +36,3 @@ jobs:
           git add --force public/build
           git commit --reuse-message HEAD --no-verify
           git push origin release/main --force
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    steps:
-      - name: Deploy
-        uses: fjogeleit/http-request-action@v1
-        with:
-          method: 'POST'
-          url: ${{ secrets.DEPLOY_URL }}
-          bearerToken: ${{ secrets.DEPLOY_TOKEN }}
-          maskResponse: true
-          retry: 3
-          retryWait: 5000
