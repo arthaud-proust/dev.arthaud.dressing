@@ -1,0 +1,1 @@
+import{_ as c,B as i}from"./app-wPClUMyT.js";const p=()=>{const o=c(),{t}=i(),s=o.props.clothesCategories??[],n=e=>(e?s[e]:void 0)??t("non_categorises"),a=Object.entries(s).map(([e,r])=>({value:Number.parseInt(e),label:r}));return{all:s,name:n,options:a}};export{p as u};

@@ -1,0 +1,1 @@
+import{_ as c,B as i}from"./app-wPClUMyT.js";const u=()=>{const e=c(),{t:o}=i(),n=e.props.dressings??[],t=s=>(s?n[s]:void 0)??o("dressing_inconnu"),r=Object.entries(n).map(([s,a])=>({value:Number.parseInt(s),label:a}));return{all:n,name:t,options:r}};export{u};

@@ -1,0 +1,1 @@
+import{a as t}from"./VButton.vue_vue_type_script_setup_true_lang-eWzSTvLp.js";import{o as r,g as n,r as s}from"./app-wPClUMyT.js";const o={},a={class:"inline-flex items-center gap-2 rounded-lg bg-neutral-100 px-2 py-1 text-sm text-neutral-700"};function c(e,l){return r(),n("span",a,[s(e.$slots,"default")])}const f=t(o,[["render",c]]);export{f as V};

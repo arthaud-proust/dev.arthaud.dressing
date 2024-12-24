@@ -1,0 +1,1 @@
+import{_ as o}from"./UpdatePreferences.vue_vue_type_script_setup_true_lang-BlEyy1-C.js";import"./VButton.vue_vue_type_script_setup_true_lang-eWzSTvLp.js";import"./app-wPClUMyT.js";import"./TagIcon-DW3umu3A.js";export{o as default};
