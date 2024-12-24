@@ -130,31 +130,36 @@ const isCreatingCategory = ref(false);
                 <InputError :message="form.errors.description" class="mt-2" />
             </div>
 
-            <div class="flex max-h-[40dvh] justify-center">
-                <template v-if="form.images.length">
-                    <div
-                        v-for="(blob, index) in form.images"
-                        class="flex justify-center"
-                    >
-                        <div class="relative h-full overflow-hidden rounded-md">
-                            <img
-                                class="h-full object-contain"
-                                :src="urlFromBlob(blob)"
-                                alt=""
-                            />
-                            <VButton
-                                icon
-                                small
-                                class="absolute right-1 top-1"
-                                variant="danger"
-                                @click="removeImage(index)"
+            <div>
+                <label> {{ $t('photo') }} ({{ $t('optionnelle') }}) </label>
+                <div class="flex max-h-[40dvh] justify-center">
+                    <template v-if="form.images.length">
+                        <div
+                            v-for="(blob, index) in form.images"
+                            class="flex justify-center"
+                        >
+                            <div
+                                class="relative h-full overflow-hidden rounded-md"
                             >
-                                <XMarkIcon class="h-5 w-5" />
-                            </VButton>
+                                <img
+                                    class="h-full object-contain"
+                                    :src="urlFromBlob(blob)"
+                                    alt=""
+                                />
+                                <VButton
+                                    icon
+                                    small
+                                    class="absolute right-1 top-1"
+                                    variant="danger"
+                                    @click="removeImage(index)"
+                                >
+                                    <XMarkIcon class="h-5 w-5" />
+                                </VButton>
+                            </div>
                         </div>
-                    </div>
-                </template>
-                <Camera v-else class="mx-auto" @photo="addImage" />
+                    </template>
+                    <Camera v-else class="mx-auto" @photo="addImage" />
+                </div>
             </div>
 
             <VButton
