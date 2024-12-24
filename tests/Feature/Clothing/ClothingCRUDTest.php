@@ -130,6 +130,25 @@ class ClothingCRUDTest extends TestCase
         $this->assertSame($dressingA->id, $clothing->dressing_id);
     }
 
+    public function test_can_update_description(): void
+    {
+        $user = User::factory()->create();
+        $dressingA = Dressing::factory()->for($user)->create();
+        $clothing = Clothing::factory()->for($dressingA)->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->put("/clothes/$clothing->id", [
+                'description' => 'Test',
+            ]);
+
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertRedirect("/dressings/$dressingA->id");
+
+        $clothing->refresh();
+        $this->assertSame('Test', $clothing->description);
+    }
+
     public function test_can_delete_clothing(): void
     {
         $user = User::factory()->create();

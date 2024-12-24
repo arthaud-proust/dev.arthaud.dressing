@@ -18,7 +18,7 @@ const labelForValue = (value: T | undefined) =>
 </script>
 <template>
     <label class="relative">
-        <VTag class="mt-2">
+        <VTag>
             <slot name="icon" />
             {{ labelForValue(model) }}
         </VTag>

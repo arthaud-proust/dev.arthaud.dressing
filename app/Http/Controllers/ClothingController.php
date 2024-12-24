@@ -43,7 +43,7 @@ class ClothingController extends Controller
             ->with('success', new FlashMessageDto('Vêtement ajouté'));
     }
 
-    public function update(UpdateClothingRequest $request, Clothing $clothing)
+    public function update(UpdateClothingRequest $request, Clothing $clothing): RedirectResponse
     {
         Gate::authorize('update', $clothing);
 

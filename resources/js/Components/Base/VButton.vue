@@ -5,7 +5,13 @@
         :disabled="disabled"
         :href="disabled ? undefined : href"
         class="inline-flex items-center justify-center gap-2 font-bold ring-offset-2 focus:outline-none disabled:brightness-100 disabled:contrast-[0.85] disabled:saturate-50 sm:focus:ring-4"
-        :class="[roundedClasses, paddingClasses, marginClasses, colorClasses]"
+        :class="[
+            roundedClasses,
+            paddingClasses,
+            marginClasses,
+            colorClasses,
+            sizeClasses,
+        ]"
     >
         <slot />
 
@@ -51,8 +57,12 @@ const roundedClasses = computed(() => {
     return props.small ? 'rounded-md' : 'rounded-lg';
 });
 
+const sizeClasses = computed(() => {
+    return props.small ? 'min-w-8 h-8' : 'min-w-10 h-10';
+});
+
 const paddingClasses = computed(() => {
-    if (props.icon) return props.small ? 'p-2' : 'p-3';
+    if (props.icon) return props.small ? 'p-1' : 'p-2';
     return props.small ? 'px-2 py-1' : 'px-4 py-2';
 });
 

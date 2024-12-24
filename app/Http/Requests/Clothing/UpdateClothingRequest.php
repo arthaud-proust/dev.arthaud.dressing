@@ -27,6 +27,7 @@ class UpdateClothingRequest extends FormRequest
         return [
             'clothes_category_id' => [Rule::exists(ClothesCategory::class, 'id')->where('user_id', $this->user()->id)],
             'dressing_id' => [Rule::exists(Dressing::class, 'id')->where('user_id', $this->user()->id)],
+            'description' => ['string', 'max:255'],
         ];
     }
 }
