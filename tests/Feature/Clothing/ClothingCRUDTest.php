@@ -90,6 +90,46 @@ class ClothingCRUDTest extends TestCase
         $this->assertSame($category->id, $clothing->clothes_category_id);
     }
 
+    public function test_can_update_dressing(): void
+    {
+        $user = User::factory()->create();
+        $dressingA = Dressing::factory()->for($user)->create();
+        $dressingB = Dressing::factory()->for($user)->create();
+        $clothing = Clothing::factory()->for($dressingA)->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->put("/clothes/$clothing->id", [
+                'dressing_id' => $dressingB->id,
+            ]);
+
+        $response->assertSessionDoesntHaveErrors();
+        $response->assertRedirect("/dressings/$dressingB->id");
+
+        $clothing->refresh();
+        $this->assertSame($dressingB->id, $clothing->dressing_id);
+    }
+
+    public function test_cannot_update_with_another_user_dressing_id(): void
+    {
+        $user = User::factory()->create();
+        $anotherUser = User::factory()->create();
+        $dressingA = Dressing::factory()->for($user)->create();
+        $dressingB = Dressing::factory()->for($anotherUser)->create();
+        $clothing = Clothing::factory()->for($dressingA)->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->put("/clothes/$clothing->id", [
+                'dressing_id' => $dressingB->id,
+            ]);
+
+        $response->assertSessionHasErrors();
+
+        $clothing->refresh();
+        $this->assertSame($dressingA->id, $clothing->dressing_id);
+    }
+
     public function test_can_delete_clothing(): void
     {
         $user = User::factory()->create();

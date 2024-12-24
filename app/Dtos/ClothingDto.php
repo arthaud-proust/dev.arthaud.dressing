@@ -16,6 +16,7 @@ class ClothingDto extends Dto
      */
     public function __construct(
         public int $id,
+        public int $dressing_id,
         public int $clothes_category_id,
         public array $imageUrls,
         public array $thumbUrls,
@@ -27,6 +28,7 @@ class ClothingDto extends Dto
     {
         return new self(
             $clothing->id,
+            $clothing->dressing_id,
             $clothing->clothes_category_id,
             $clothing->getMedia()->map(function (Media $media) {
                 return $media->getTemporaryUrl(now()->addHour());

@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'clothesCategories' => $request->user()?->clothesCategories()->pluck('name', 'id'),
+            'dressings' => $request->user()?->dressings()->pluck('name', 'id'),
             'flash' => [
                 'success' => Session::get('success'),
                 'error' => Session::get('error'),

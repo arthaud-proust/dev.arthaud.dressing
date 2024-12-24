@@ -28,6 +28,7 @@ declare module 'vue' {
 declare module '@inertiajs/core' {
     interface PageProps extends InertiaPageProps, AppPageProps {
         clothesCategories?: Record<number, string>;
+        dressings?: Record<number, string>;
         flash: {
             success?: FlashMessageDto;
             error?: FlashMessageDto;

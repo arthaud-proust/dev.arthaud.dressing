@@ -135,5 +135,6 @@
     "enlever_step": "Enlever {stepBy}",
     "ajouter_step": "Ajouter {stepBy}",
     "afficher_le_rsum": "Afficher le résumé",
-    "afficher_les_images": "Afficher les images"
+    "afficher_les_images": "Afficher les images",
+    "dressing_inconnu": "Dressing inconnu"
 }

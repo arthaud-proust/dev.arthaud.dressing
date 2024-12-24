@@ -49,6 +49,8 @@ class ClothingController extends Controller
 
         $clothing->update($request->validated());
 
+        $clothing->refresh();
+
         return redirect()
             ->route('dressings.show', $clothing->dressing)
             ->with('success', new FlashMessageDto('Vêtement modifié'));

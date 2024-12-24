@@ -3,9 +3,11 @@ import { ClothingDto } from '@/types/generated';
 import { DialogTitle } from '@headlessui/vue';
 
 import VButton from '@/Components/Base/VButton.vue';
-import VTag from '@/Components/Base/VTag.vue';
+import VTagSelect from '@/Components/Base/VTagSelect.vue';
+import HangerIcon from '@/Components/Icon/Outline/HangerIcon.vue';
 import Modal from '@/Components/Modal.vue';
 import { useClothesCategories } from '@/composables/useClothesCategories';
+import { useDressings } from '@/composables/useDressings';
 import { TagIcon, TrashIcon } from '@heroicons/vue/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid';
 import { router, useForm } from '@inertiajs/vue3';
@@ -24,18 +26,21 @@ const emit = defineEmits<{
 }>();
 
 const clothesCategories = useClothesCategories();
+const dressings = useDressings();
 
 const pagination = {
     clickable: true,
 };
 
 const clothesCategoryForm = useForm({
+    dressing_id: props.clothing.dressing_id,
     clothes_category_id: props.clothing.clothes_category_id,
 });
 
 watch(clothesCategoryForm, (value) => {
     router.put(route('clothes.update', props.clothing), {
         clothes_category_id: value.clothes_category_id,
+        dressing_id: value.dressing_id,
     });
 });
 
@@ -84,27 +89,24 @@ const deleteClothing = () => {
                     {{ $t('detail_du_vetement') }}
                 </DialogTitle>
 
-                <label class="relative">
-                    <VTag class="mt-2">
+                <VTagSelect
+                    :options="dressings.options"
+                    v-model="clothesCategoryForm.dressing_id"
+                >
+                    <template #icon>
+                        <HangerIcon class="size-5" />
+                    </template>
+                </VTagSelect>
+
+                <VTagSelect
+                    class="ml-2"
+                    :options="clothesCategories.options"
+                    v-model="clothesCategoryForm.clothes_category_id"
+                >
+                    <template #icon>
                         <TagIcon class="size-5" />
-                        {{
-                            clothesCategories.name(
-                                clothesCategoryForm.clothes_category_id,
-                            )
-                        }}
-                    </VTag>
-                    <select
-                        v-model="clothesCategoryForm.clothes_category_id"
-                        class="absolute inset-0 opacity-0"
-                    >
-                        <option
-                            v-for="clothesCategory in clothesCategories.options"
-                            :value="clothesCategory.value"
-                        >
-                            {{ clothesCategory.label }}
-                        </option>
-                    </select>
-                </label>
+                    </template>
+                </VTagSelect>
             </div>
 
             <VButton @click="deleteClothing" variant="danger" class="">

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Clothing;
 
 use App\Models\ClothesCategory;
+use App\Models\Dressing;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +25,8 @@ class UpdateClothingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'clothes_category_id' => ['required', Rule::exists(ClothesCategory::class, 'id')->where('user_id', $this->user()->id)],
+            'clothes_category_id' => [Rule::exists(ClothesCategory::class, 'id')->where('user_id', $this->user()->id)],
+            'dressing_id' => [Rule::exists(Dressing::class, 'id')->where('user_id', $this->user()->id)],
         ];
     }
 }

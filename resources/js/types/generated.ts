@@ -22,6 +22,7 @@ export enum ClothingCategory {
 }
 export type ClothingDto = {
     id: number;
+    dressing_id: number;
     clothes_category_id: number;
     imageUrls: Array<any>;
     thumbUrls: Array<any>;
