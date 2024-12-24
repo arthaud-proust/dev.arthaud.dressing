@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Dtos\ClothesCategoryDto;
-use App\Dtos\DressingDto;
 use App\Dtos\FlashMessageDto;
 use App\Http\Requests\StoreClothingCategoryRequest;
 use App\Http\Requests\UpdateClothingCategoryRequest;
@@ -11,9 +10,11 @@ use App\Models\ClothesCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 use function redirect;
+use function str_ends_with;
 
 class ClothesCategoryController extends Controller
 {
@@ -24,11 +25,9 @@ class ClothesCategoryController extends Controller
         ]);
     }
 
-    public function create(Request $request): Response
+    public function create(): Response
     {
-        return Inertia::render('ClothesCategory/Create', [
-            'dressings' => DressingDto::collect($request->user()->dressings),
-        ]);
+        return Inertia::render('ClothesCategory/Create');
     }
 
     public function store(StoreClothingCategoryRequest $request): RedirectResponse
@@ -47,9 +46,14 @@ class ClothesCategoryController extends Controller
             ]);
         }
 
+        Session::flash('success', new FlashMessageDto("Catégorie $clothesCategory->name créée"));
+
+        if (str_ends_with(url()->previous(), '/clothes/create')) {
+            return redirect()->back();
+        }
+
         return redirect()
-            ->route('clothes-categories.index')
-            ->with('success', new FlashMessageDto("Catégorie $clothesCategory->name créée"));
+            ->route('clothes-categories.index');
     }
 
     public function edit(Request $request, ClothesCategory $clothesCategory): Response
@@ -57,7 +61,6 @@ class ClothesCategoryController extends Controller
         return Inertia::render('ClothesCategory/Edit', [
             'clothesCategory' => ClothesCategoryDto::from($clothesCategory),
             'clothesMinByDressing' => $clothesCategory->clothesCategoryRequirements()->pluck('min', 'dressing_id'),
-            'dressings' => DressingDto::collect($request->user()->dressings),
         ]);
     }
 

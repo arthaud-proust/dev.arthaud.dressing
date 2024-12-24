@@ -1,30 +1,18 @@
 <script setup lang="ts">
 import VButton from '@/Components/Base/VButton.vue';
-import VInput from '@/Components/Base/VInput.vue';
-import VNumberInput from '@/Components/Base/VNumberInput.vue';
-import InputError from '@/Components/InputError.vue';
+import ClothesCategoryForm from '@/Components/ClothesCategory/ClothesCategoryForm.vue';
 import Modal from '@/Components/Modal.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ClothesCategoryDto, DressingDto } from '@/types/generated';
+import { ClothesCategoryDto } from '@/types/generated';
 import { TrashIcon } from '@heroicons/vue/24/outline';
-import { Head, router, useForm } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps<{
     clothesCategory: ClothesCategoryDto;
     clothesMinByDressing: Record<string, number>;
-    dressings: Array<DressingDto>;
 }>();
-
-const form = useForm({
-    name: props.clothesCategory.name,
-    clothesMinByDressing: props.clothesMinByDressing,
-});
-
-const submit = () => {
-    form.put(route('clothes-categories.update', props.clothesCategory));
-};
 
 const confirmingDeletion = ref(false);
 const confirmDeletion = () => {
@@ -58,50 +46,10 @@ const closeModal = () => {
             </VPageHeader>
         </template>
 
-        <form
-            class="mx-auto mt-auto flex w-full max-w-lg flex-col gap-8"
-            @submit.prevent="submit"
-        >
-            <div>
-                <label>{{ $t('nom') }}</label>
-                <VInput v-model="form.name" class="w-full" />
-
-                <InputError :message="form.errors.name" class="mt-2" />
-            </div>
-
-            <div>
-                <p class="text-xl">
-                    {{ $t('minimum_de_vtement_par_dressing') }}
-                </p>
-                <p class="mt-2">
-                    {{
-                        $t('dfinit_le_minimum_de_vtement_quil_te_faut_dans_ce')
-                    }}
-                </p>
-
-                <div class="mt-4 grid grid-cols-2 gap-2">
-                    <div v-for="(min, dressingId) in form.clothesMinByDressing">
-                        <label class="text-sm">{{
-                            dressings.find(
-                                (d) => d.id === Number.parseInt(dressingId),
-                            )?.name
-                        }}</label>
-                        <VNumberInput
-                            :min="0"
-                            v-model="form.clothesMinByDressing[dressingId]"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <VButton
-                type="submit"
-                :disabled="form.processing"
-                :loading="form.processing"
-            >
-                {{ $t('modifier_la_catgorie') }}
-            </VButton>
-        </form>
+        <ClothesCategoryForm
+            :clothes-category="clothesCategory"
+            :clothes-min-by-dressing="clothesMinByDressing"
+        />
 
         <Modal v-if="confirmingDeletion" @close="closeModal">
             <form class="space-y-4" @submit.prevent="deleteClothesCategory">

@@ -9,6 +9,7 @@ use App\Http\Requests\Clothing\UpdateClothingRequest;
 use App\Models\Clothing;
 use App\Models\Dressing;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -17,7 +18,7 @@ use function redirect;
 
 class ClothingController extends Controller
 {
-    public function create(Dressing $dressing): Response
+    public function create(Request $request, Dressing $dressing): Response
     {
         Gate::authorize('create', [Clothing::class, $dressing]);
 

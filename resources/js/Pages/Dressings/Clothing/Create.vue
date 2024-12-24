@@ -3,7 +3,9 @@ import VButton from '@/Components/Base/VButton.vue';
 import VInput from '@/Components/Base/VInput.vue';
 import VSelect from '@/Components/Base/VSelect.vue';
 import Camera from '@/Components/Camera.vue';
+import ClothesCategoryForm from '@/Components/ClothesCategory/ClothesCategoryForm.vue';
 import InputError from '@/Components/InputError.vue';
+import Modal from '@/Components/Modal.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import { useClothesCategories } from '@/composables/useClothesCategories';
 import NoLayout from '@/Layouts/NoLayout.vue';
@@ -12,16 +14,27 @@ import { PlusIcon, XMarkIcon } from '@heroicons/vue/24/solid';
 import { Head, useForm } from '@inertiajs/vue3';
 import { useStorage } from '@vueuse/core';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     dressing: DressingDto;
 }>();
 
+const { t } = useI18n();
 const clothesCategories = useClothesCategories();
+
+const categoryOptions = computed(() => [
+    ...clothesCategories.options,
+    {
+        value: -1,
+        label: t('slectionner_une_categorie'),
+        disabled: true,
+    },
+]);
 
 const storedClothesCategoryId = useStorage(
     'dressing.clothes.create',
-    clothesCategories.options[0].value,
+    categoryOptions.value[0]?.value,
 );
 
 const form = useForm({
@@ -55,7 +68,7 @@ const removeImage = (index: number) => {
 const urlFromBlob = (blob: Blob) =>
     (window.URL || window.webkitURL).createObjectURL(blob);
 
-const step = ref<1 | 2>(1);
+const isCreatingCategory = ref(false);
 </script>
 
 <template>
@@ -75,16 +88,33 @@ const step = ref<1 | 2>(1);
         </template>
 
         <form
-            class="mx-auto flex h-min max-w-lg flex-col gap-4"
+            class="mx-auto flex h-min w-full max-w-lg flex-col gap-4"
             @submit.prevent="submit"
         >
             <div>
                 <label>{{ $t('catgorie') }}</label>
-                <VSelect
-                    v-model="clothesCategoryId"
-                    :options="clothesCategories.options"
-                    class="w-full"
-                />
+                <div class="flex gap-2">
+                    <VSelect
+                        v-if="categoryOptions.length > 1"
+                        v-model="clothesCategoryId"
+                        :options="categoryOptions"
+                        class="w-full"
+                    />
+
+                    <VButton
+                        variant="tertiary"
+                        @click="isCreatingCategory = true"
+                        :icon="categoryOptions.length > 1"
+                        :rounded="false"
+                    >
+                        <PlusIcon class="size-5" />
+                        <span
+                            :class="{ 'sr-only': categoryOptions.length > 1 }"
+                        >
+                            {{ $t('crer_une_catgorie') }}
+                        </span>
+                    </VButton>
+                </div>
 
                 <InputError :message="form.errors.description" class="mt-2" />
             </div>
@@ -129,11 +159,15 @@ const step = ref<1 | 2>(1);
 
             <VButton
                 type="submit"
-                :disabled="form.processing"
+                :disabled="form.processing || form.clothes_category_id === -1"
                 :loading="form.processing"
                 >{{ $t('ajouter_le_vtement') }}
                 <PlusIcon class="size-5" />
             </VButton>
         </form>
+
+        <Modal v-if="isCreatingCategory" @close="isCreatingCategory = false">
+            <ClothesCategoryForm />
+        </Modal>
     </NoLayout>
 </template>

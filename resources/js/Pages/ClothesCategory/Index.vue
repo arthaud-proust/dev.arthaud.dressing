@@ -28,7 +28,7 @@ const props = defineProps<{
             </VPageHeader>
         </template>
 
-        <div class="mx-auto mt-auto flex w-full max-w-lg flex-col gap-2 py-16">
+        <div class="mx-auto flex w-full max-w-lg flex-col gap-2 py-10">
             <VStretchedButton
                 v-for="clothesCategory in clothesCategories"
                 :sr-text="clothesCategory.name"
