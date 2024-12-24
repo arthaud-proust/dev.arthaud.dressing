@@ -45,7 +45,7 @@ export type DressingDto = {
 };
 export type DressingOverviewDto = {
     dressing: DressingDto;
-    clothesCount: number;
+    clothes: Array<ClothingDto>;
 };
 export type FlashMessageDto = {
     id: string;

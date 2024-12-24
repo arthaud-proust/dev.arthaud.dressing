@@ -3,6 +3,7 @@
 namespace App\Dtos\Overview;
 
 use App\Dtos\ClothesCategoryDto;
+use App\Dtos\ClothingDto;
 use App\Dtos\DressingDto;
 use App\Models\ClothesCategory;
 use App\Models\Dressing;
@@ -22,7 +23,7 @@ class ClothesCategoryOverviewDto extends Dto
         /** @var DressingOverviewDto[]> */
         public Collection $dressings,
     ) {
-        $this->clothesCount = $this->dressings->sum('clothesCount');
+        $this->clothesCount = $this->dressings->sum(fn(DressingOverviewDto $dressingOverviewDto) => $dressingOverviewDto->clothes->count());
     }
 
     public static function fromModel(ClothesCategory $clothesCategory): self
@@ -33,7 +34,7 @@ class ClothesCategoryOverviewDto extends Dto
                 $clothesCategory->user->dressings->map(function (Dressing $dressing) use ($clothesCategory) {
                     return new DressingOverviewDto(
                         DressingDto::from($dressing),
-                        $dressing->clothes()->where('clothes_category_id', $clothesCategory->id)->count(),
+                        ClothingDto::collect($dressing->clothes()->where('clothes_category_id', $clothesCategory->id)->get()),
                     );
                 })
             )

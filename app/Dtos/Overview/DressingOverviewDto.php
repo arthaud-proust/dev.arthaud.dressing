@@ -2,7 +2,9 @@
 
 namespace App\Dtos\Overview;
 
+use App\Dtos\ClothingDto;
 use App\Dtos\DressingDto;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Dto;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -11,7 +13,8 @@ class DressingOverviewDto extends Dto
 {
     public function __construct(
         public DressingDto $dressing,
-        public int $clothesCount,
+        /** @var ClothingDto[]> */
+        public Collection $clothes,
     ) {
     }
 }

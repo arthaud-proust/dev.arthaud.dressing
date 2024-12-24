@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import { ClothingDto } from '@/types/generated';
+import { ClothingDto, DressingColor } from '@/types/generated';
+import { dressingColorClasses } from '@/utils/dressing';
 import { QuestionMarkCircleIcon } from '@heroicons/vue/24/solid';
 import { ref } from 'vue';
 
 const props = defineProps<{
     clothing: ClothingDto;
+    color?: DressingColor;
 }>();
 
-const noImages = props.clothing.thumbUrls.length === 0;
+const noImages = props.clothing.thumbUrls?.length === 0;
 const imageError = ref(false);
 </script>
 <template>
-    <article class="relative w-full overflow-hidden rounded-lg bg-neutral-50">
+    <article
+        class="relative w-full overflow-hidden rounded-lg"
+        :class="
+            color
+                ? dressingColorClasses(color).container
+                : 'bg-neutral-50 text-neutral-500'
+        "
+    >
         <div class="flex gap-1">
             <template v-if="!imageError">
                 <img
@@ -32,16 +41,10 @@ const imageError = ref(false);
             </div>
         </div>
 
-        <p
-            class="p-2 text-center text-xs text-neutral-500"
-            v-if="clothing.description"
-        >
+        <p class="p-2 text-center text-xs" v-if="clothing.description">
             {{ clothing.description }}
         </p>
-        <p
-            class="p-2 text-center text-xs text-neutral-500"
-            v-else-if="noImages"
-        >
+        <p class="p-2 text-center text-xs" v-else-if="noImages">
             {{ $t('aucune_description') }}
         </p>
     </article>
