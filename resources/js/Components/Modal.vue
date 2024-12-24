@@ -41,7 +41,7 @@ const close = () => {
 
             <div class="fixed inset-0 overflow-y-auto">
                 <div
-                    class="flex min-h-full justify-center p-2 text-center max-md:items-end md:items-center md:p-4"
+                    class="flex min-h-full justify-center text-center max-md:items-end md:items-center md:p-4"
                 >
                     <TransitionChild
                         as="template"
@@ -53,7 +53,7 @@ const close = () => {
                         leave-to="opacity-0 scale-95"
                     >
                         <DialogPanel
-                            class="relative w-full max-w-2xl transform flex-col items-start overflow-hidden rounded-2xl bg-white p-4 text-left align-middle shadow-xl transition-all md:rounded-3xl md:p-6"
+                            class="relative w-full max-w-2xl transform flex-col items-start overflow-hidden rounded-t-2xl bg-white p-4 text-left align-middle shadow-xl transition-all md:rounded-3xl md:p-6"
                         >
                             <slot />
                         </DialogPanel>
