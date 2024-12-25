@@ -4,7 +4,6 @@ namespace Tests\Feature\Clothing;
 
 use App\Models\ClothesCategory;
 use App\Models\ClothesCategoryRequirement;
-use App\Models\Clothing;
 use App\Models\Dressing;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -130,24 +129,6 @@ class ClothesCategoryCRUDTest extends TestCase
         $this->assertDatabaseHas(ClothesCategoryRequirement::class, [
             'min' => 1,
         ]);
-    }
-
-    public function test_delete_clothes_category_will_unset_category_id_for_related_clothes(): void
-    {
-        $user = User::factory()->create();
-        $dressing = Dressing::factory()->for($user)->create();
-        $clothesCategory = ClothesCategory::factory()->for($user)->create([
-            'name' => 'T-shirts',
-        ]);
-        $clothing = Clothing::factory()->for($dressing)->for($clothesCategory)->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->delete("/clothes-categories/$clothesCategory->id");
-
-        $response->assertRedirect();
-
-        $this->assertNull($clothing->fresh()->clothes_category_id);
     }
 
     public function test_cannot_delete_clothes_category_of_another_user(): void

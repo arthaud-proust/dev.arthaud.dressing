@@ -88,7 +88,11 @@ const closeModal = () => {
                 </p>
 
                 <div class="mt-4 grid grid-cols-2 gap-2">
-                    <div v-for="(name, categoryId) in clothesCategories.all">
+                    <div
+                        v-for="(
+                            name, categoryId
+                        ) in clothesCategories.allWithoutUncategorized"
+                    >
                         <label class="text-sm">{{ name }}</label>
                         <VNumberInput
                             class="w-full"

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,8 @@ class ClothesCategory extends Model
 {
     /** @use HasFactory<\Database\Factories\ClothesCategoryFactory> */
     use HasFactory;
+
+    public const UNCATEGORIZED_NAME = 'uncategorized';
 
     protected $fillable = [
         'name',
@@ -29,6 +32,12 @@ class ClothesCategory extends Model
                 ]);
             });
         });
+
+        static::deleting(static function (self $clothesCategory) {
+            $clothesCategory->clothes()->update([
+                'clothes_category_id' => $clothesCategory->user->uncategorizedClothesCategory()->id,
+            ]);
+        });
     }
 
     public function clothes(): HasMany
@@ -44,5 +53,10 @@ class ClothesCategory extends Model
     public function clothesCategoryRequirements(): HasMany
     {
         return $this->hasMany(ClothesCategoryRequirement::class);
+    }
+
+    public function scopeExceptUncategorized(Builder $query): Builder
+    {
+        return $query->where('name', '!=', self::UNCATEGORIZED_NAME);
     }
 }

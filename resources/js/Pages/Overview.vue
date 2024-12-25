@@ -4,6 +4,7 @@ import VStretchedButton from '@/Components/Base/VStretchedButton.vue';
 import ClothingCard from '@/Components/Clothing/ClothingCard.vue';
 import ClothingDetails from '@/Components/Clothing/ClothingDetails.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
+import { useClothesCategories } from '@/composables/useClothesCategories';
 import NoLayout from '@/Layouts/NoLayout.vue';
 import { ClothesCategoryOverviewDto, ClothingDto } from '@/types/generated';
 import { dressingColorClasses } from '@/utils/dressing';
@@ -17,6 +18,7 @@ const props = defineProps<{
 
 const selectedClothing = ref<ClothingDto | null>(null);
 const showDetailed = ref(false);
+const clothesCategories = useClothesCategories();
 </script>
 <template>
     <Head :title="$t('vue_densemble')" />
@@ -54,7 +56,9 @@ const showDetailed = ref(false);
                 v-for="{ clothesCount, category, dressings } in categories"
             >
                 <h2 class="mb-2 text-xl">
-                    {{ category.name }} ({{ clothesCount }})
+                    {{ clothesCategories.translatedName(category.name) }} ({{
+                        clothesCount
+                    }})
                 </h2>
 
                 <ul class="flex flex-row gap-1 py-6">
@@ -90,7 +94,9 @@ const showDetailed = ref(false);
         <div v-show="showDetailed" class="my-8 flex flex-col gap-24">
             <div v-for="{ clothesCount, category, dressings } in categories">
                 <h2 class="col-span-s sticky top-0 mb-2 text-2xl">
-                    {{ category.name }} ({{ clothesCount }})
+                    {{ clothesCategories.translatedName(category.name) }} ({{
+                        clothesCount
+                    }})
                 </h2>
 
                 <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">

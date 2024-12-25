@@ -2,7 +2,7 @@ import { ClothesCategoryDto, ClothingDto } from '@/types/generated';
 import { MaybeRefOrGetter } from '@vueuse/core';
 import { computed, ref, toValue } from 'vue';
 
-export type ClothesCountByCategoryId = Record<ClothesCategoryDto['id'], number>;
+export type ClothesCountByCategoryId = Record<string, number>;
 export type ClothesIdsByCategoryId = Record<
     ClothesCategoryDto['id'],
     Set<ClothingDto['id']>

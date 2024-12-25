@@ -63,4 +63,11 @@ class User extends Authenticatable
         return $this->hasMany(ClothesCategory::class);
     }
 
+    public function uncategorizedClothesCategory(): ClothesCategory
+    {
+        return $this->clothesCategories()->firstOrCreate([
+            'name' => ClothesCategory::UNCATEGORIZED_NAME,
+        ]);
+    }
+
 }

@@ -173,7 +173,7 @@ const stepClothingInfos = computed(() => {
                         $t('slectionne_n_clothing', {
                             n: stepClothingInfos.missingCount,
                             clothing: clothesCategories
-                                .name(stepClothingInfos.category)
+                                .nameFromId(stepClothingInfos.category)
                                 .toLowerCase(),
                         })
                     }}
@@ -189,7 +189,7 @@ const stepClothingInfos = computed(() => {
                                 'il_ny_a_pas_assez_de_clothing_dans_ce_dressing',
                                 {
                                     clothing: clothesCategories
-                                        .name(stepClothingInfos.category)
+                                        .nameFromId(stepClothingInfos.category)
                                         .toLowerCase(),
                                 },
                             )
@@ -274,7 +274,9 @@ const stepClothingInfos = computed(() => {
                                 />
                                 <span
                                     >{{ missingCountForCategory(category) }}
-                                    {{ clothesCategories.name(category) }}</span
+                                    {{
+                                        clothesCategories.nameFromId(category)
+                                    }}</span
                                 >
                                 <span v-if="!canCategoryBeCompleted(category)">
                                     ({{
@@ -312,7 +314,7 @@ const stepClothingInfos = computed(() => {
                         >
                             {{ count }}
                             {{
-                                clothesCategories.name(
+                                clothesCategories.nameFromId(
                                     Number.parseInt(category),
                                 )
                             }}
@@ -341,7 +343,7 @@ const stepClothingInfos = computed(() => {
                             "
                         >
                             {{ selectedCountForCategory(category) }}
-                            {{ clothesCategories.name(category) }}
+                            {{ clothesCategories.nameFromId(category) }}
                         </span>
                     </li>
                 </ul>

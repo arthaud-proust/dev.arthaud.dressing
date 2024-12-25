@@ -24,7 +24,7 @@ const { t } = useI18n();
 const clothesCategories = useClothesCategories();
 
 const categoryOptions = computed(() => [
-    ...clothesCategories.options,
+    ...clothesCategories.optionsWithoutUncategorized,
     {
         value: -1,
         label: t('slectionner_une_categorie'),

@@ -82,7 +82,9 @@ const send = () => {
             v-for="(clothes, categoryId) in clothesByCategory"
         >
             <h3 class="text-xl">
-                {{ clothesCategories.name(categoryId) }} ({{ clothes.length }})
+                {{ clothesCategories.nameFromId(categoryId) }} ({{
+                    clothes.length
+                }})
             </h3>
             <div class="mt-2 flex items-start gap-2 overflow-y-auto pb-4 pr-8">
                 <VStretchedButton
