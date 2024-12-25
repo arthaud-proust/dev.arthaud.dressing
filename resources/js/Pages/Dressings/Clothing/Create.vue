@@ -171,7 +171,7 @@ const isCreatingCategory = ref(false);
             </VButton>
         </form>
 
-        <Modal v-if="isCreatingCategory" @close="isCreatingCategory = false">
+        <Modal :show="isCreatingCategory" @close="isCreatingCategory = false">
             <ClothesCategoryForm />
         </Modal>
     </NoLayout>

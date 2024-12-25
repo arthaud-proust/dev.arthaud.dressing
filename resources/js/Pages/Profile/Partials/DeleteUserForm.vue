@@ -56,52 +56,48 @@ const closeModal = () => {
         </VButton>
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900">
-                    {{ $t('tesvous_sr_de_vouloir_supprimer_votre_compte') }}
-                </h2>
+            <h2 class="text-lg font-medium text-gray-900">
+                {{ $t('tesvous_sr_de_vouloir_supprimer_votre_compte') }}
+            </h2>
 
-                <p class="mt-2 text-gray-600">
-                    {{
-                        $t('une_fois_que_votre_compte_est_supprim_toutes_ses_r')
-                    }}
-                </p>
+            <p class="mt-2 text-gray-600">
+                {{ $t('une_fois_que_votre_compte_est_supprim_toutes_ses_r') }}
+            </p>
 
-                <div class="mt-6">
-                    <InputLabel
-                        for="password"
-                        :value="$t('mot_de_passe')"
-                        class="sr-only"
-                    />
+            <div class="mt-6">
+                <InputLabel
+                    for="password"
+                    :value="$t('mot_de_passe')"
+                    class="sr-only"
+                />
 
-                    <VInput
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        :placeholder="$t('mot_de_passe')"
-                        @keyup.enter="deleteUser"
-                    />
+                <VInput
+                    id="password"
+                    ref="passwordInput"
+                    v-model="form.password"
+                    type="password"
+                    class="mt-1 block w-3/4"
+                    :placeholder="$t('mot_de_passe')"
+                    @keyup.enter="deleteUser"
+                />
 
-                    <InputError :message="form.errors.password" class="mt-2" />
-                </div>
+                <InputError :message="form.errors.password" class="mt-2" />
+            </div>
 
-                <div class="mt-6 flex justify-end">
-                    <VButton variant="tertiary" @click="closeModal">
-                        {{ $t('annuler') }}
-                    </VButton>
+            <div class="mt-6 flex justify-end">
+                <VButton variant="tertiary" @click="closeModal">
+                    {{ $t('annuler') }}
+                </VButton>
 
-                    <VButton
-                        class="ms-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
-                        variant="danger"
-                    >
-                        {{ $t('supprimer_le_compte') }}
-                    </VButton>
-                </div>
+                <VButton
+                    class="ms-3"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                    @click="deleteUser"
+                    variant="danger"
+                >
+                    {{ $t('supprimer_le_compte') }}
+                </VButton>
             </div>
         </Modal>
     </section>

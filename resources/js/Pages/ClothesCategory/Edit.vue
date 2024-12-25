@@ -51,7 +51,7 @@ const closeModal = () => {
             :clothes-min-by-dressing="clothesMinByDressing"
         />
 
-        <Modal v-if="confirmingDeletion" @close="closeModal">
+        <Modal :show="confirmingDeletion" @close="closeModal">
             <form class="space-y-4" @submit.prevent="deleteClothesCategory">
                 <h2 class="text-2xl">{{ $t('supprimer_la_catgorie') }}</h2>
 

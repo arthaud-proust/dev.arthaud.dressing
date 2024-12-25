@@ -41,16 +41,16 @@ const close = () => {
 
             <div class="fixed inset-0 overflow-y-auto">
                 <div
-                    class="flex min-h-full justify-center text-center max-md:items-end md:items-center md:p-4"
+                    class="flex min-h-full justify-center overflow-hidden text-center max-md:items-end md:items-center md:p-4"
                 >
                     <TransitionChild
                         as="template"
-                        enter="duration-300 ease-out"
-                        enter-from="opacity-0 scale-95"
-                        enter-to="opacity-100 scale-100"
+                        enter="duration-200 ease-out"
+                        enter-from="opacity-0 max-md:translate-y-full md:scale-95"
+                        enter-to="opacity-100 max-md:translate-y-0 md:scale-100"
                         leave="duration-200 ease-in"
-                        leave-from="opacity-100 scale-100"
-                        leave-to="opacity-0 scale-95"
+                        leave-from="opacity-100 max-md:translate-y-0 md:scale-100"
+                        leave-to="opacity-0 max-md:translate-y-full md:scale-95"
                     >
                         <DialogPanel
                             class="relative w-full max-w-2xl transform flex-col items-start overflow-hidden rounded-t-2xl bg-white p-4 text-left align-middle shadow-xl transition-all md:rounded-3xl md:p-6"
