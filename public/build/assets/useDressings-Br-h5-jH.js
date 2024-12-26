@@ -1,0 +1,1 @@
+import{c7 as c,bV as i}from"./app-DFNFXxLc.js";const l=()=>{const n=c(),{t}=i(),e=n.props.dressings??[],o=s=>(s?e[s]:void 0)??t("dressing_inconnu"),r=Object.entries(e).map(([s,a])=>({value:Number.parseInt(s),label:a}));return{all:e,defaultMinForEachDressing:()=>Object.fromEntries(Object.keys(e).map(s=>[s,0])),name:o,options:r}};export{l as u};

@@ -1,0 +1,1 @@
+import{d as a,o as t,g as n,r,n as s}from"./app-DFNFXxLc.js";const d=a({__name:"VTag",props:{variant:{default:"default"}},setup(l){return(e,o)=>(t(),n("span",{class:s(["inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-bold",{"bg-neutral-100 text-neutral-700":e.variant==="default"}])},[r(e.$slots,"default")],2))}});export{d as _};
