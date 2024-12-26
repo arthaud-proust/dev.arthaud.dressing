@@ -18,10 +18,12 @@ const labelForValue = (value: T | undefined) =>
 </script>
 <template>
     <label class="relative">
-        <VTag>
-            <slot name="icon" />
-            {{ labelForValue(model) }}
-        </VTag>
+        <slot>
+            <VTag>
+                <slot name="icon" />
+                {{ labelForValue(model) }}
+            </VTag>
+        </slot>
         <select v-model="model" class="absolute inset-0 opacity-0">
             <option v-for="{ value, label } in options" :value="value">
                 {{ label }}

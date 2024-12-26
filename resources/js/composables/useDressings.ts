@@ -16,8 +16,14 @@ export const useDressings = () => {
         label: name,
     }));
 
+    const defaultMinForEachDressing = () =>
+        Object.fromEntries(
+            Object.keys(dressings).map((dressingId) => [dressingId, 0]),
+        );
+
     return {
         all: dressings,
+        defaultMinForEachDressing,
         name,
         options,
     };

@@ -40,7 +40,26 @@ const selectDestination = (dressing: DressingDto) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <VPageHeader :title="$t('faire_ma_valise')" />
+            <VPageHeader :title="$t('faire_ma_valise')">
+                <div>
+                    <p>
+                        On t'aide à faire ta valise en listant ce qu'il te
+                        manque là où tu vas.
+                    </p>
+
+                    <!--                    <ol class="list-inside list-decimal">-->
+                    <!--                        <li>Sélectionne où tu es et là où tu vas</li>-->
+                    <!--                        <li>-->
+                    <!--                            Configure le minimum de vêtement qu'il te faut pour-->
+                    <!--                            chaque catégorie-->
+                    <!--                        </li>-->
+                    <!--                        <li>-->
+                    <!--                            Ajoute tes vêtements à ta valise catégorie par-->
+                    <!--                            catégorie !-->
+                    <!--                        </li>-->
+                    <!--                    </ol>-->
+                </div>
+            </VPageHeader>
         </template>
 
         <div class="mx-auto mt-auto w-full max-w-lg">

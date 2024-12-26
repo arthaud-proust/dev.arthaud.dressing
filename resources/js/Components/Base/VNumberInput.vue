@@ -44,7 +44,7 @@ const decrement = () => {
 };
 </script>
 <template>
-    <div class="flex gap-1">
+    <div class="relative flex gap-1">
         <VButton
             :disabled="disabled || !canDecrement"
             @click="decrement"
@@ -55,7 +55,6 @@ const decrement = () => {
             <MinusIcon class="size-4" />
             <span class="sr-only">{{ $t('enlever_step', { stepBy }) }}</span>
         </VButton>
-        <VInput :disabled="disabled" v-model="model" class="w-16 text-center" />
         <VButton
             :disabled="disabled || !canIncrement"
             @click="increment"
@@ -66,5 +65,6 @@ const decrement = () => {
             <PlusIcon class="size-4" />
             <span class="sr-only">{{ $t('ajouter_step', { stepBy }) }}</span>
         </VButton>
+        <VInput :disabled="disabled" v-model="model" class="w-16 text-center" />
     </div>
 </template>

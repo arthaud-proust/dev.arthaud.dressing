@@ -74,19 +74,19 @@ export const useClothingCategoriesBalance = ({
     };
 
     const canAllCategoriesBeCompleted = computed(() =>
-        Object.keys(min).map((categoryStr) =>
+        Object.keys(toValue(min)).map((categoryStr) =>
             canCategoryBeCompleted(categoryFromString(categoryStr)),
         ),
     );
 
     const incompleteCategories = computed(() =>
-        Object.keys(min)
+        Object.keys(toValue(min))
             .map((categoryStr) => categoryFromString(categoryStr))
             .filter((category) => isCategoryIncomplete(category)),
     );
 
     const missingCountByCategory = computed(() =>
-        Object.keys(min).map((categoryStr) =>
+        Object.keys(toValue(min)).map((categoryStr) =>
             missingCountForCategory(categoryFromString(categoryStr)),
         ),
     );

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import VAlert from '@/Components/Base/VAlert.vue';
 import VButton from '@/Components/Base/VButton.vue';
+import VNumberInput from '@/Components/Base/VNumberInput.vue';
 import VStretchedButton from '@/Components/Base/VStretchedButton.vue';
-import VTag from '@/Components/Base/VTag.vue';
 import ClothingCard from '@/Components/Clothing/ClothingCard.vue';
+import DressingTag from '@/Components/Dressing/DressingTag.vue';
 import { useClothesCategories } from '@/composables/useClothesCategories';
 import {
     ClothesCountByCategoryId,
@@ -20,6 +21,7 @@ import {
     ArrowRightIcon,
     CheckIcon,
     ExclamationTriangleIcon,
+    PencilIcon,
     XMarkIcon,
 } from '@heroicons/vue/24/outline';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -35,6 +37,17 @@ const props = defineProps<{
         Array<ClothingDto>
     >;
 }>();
+
+const isEditingMinByCategory = ref(false);
+const clothesMinByCategory = ref(props.clothesMinByCategoryInDestination);
+
+const saveMinByCategory = () => {
+    isEditingMinByCategory.value = false;
+};
+const resetMinByCategory = () => {
+    isEditingMinByCategory.value = false;
+    clothesMinByCategory.value = props.clothesMinByCategoryInDestination;
+};
 
 const clothesCategories = useClothesCategories();
 
@@ -58,7 +71,7 @@ const {
     isCategoryCompletedWithSelection,
     percentageOfMinNotDefined,
 } = useClothingCategoriesBalance({
-    min: props.clothesMinByCategoryInDestination,
+    min: clothesMinByCategory,
     current: props.clothesCountByCategoryInDestination,
     available: availableByCategory,
 });
@@ -76,28 +89,38 @@ const send = () => {
 };
 
 const nextStep = () => {
-    if (step.value === 'start') {
+    if (step.value === 'setup') {
+        step.value = 'recap-start';
+    } else if (step.value === 'recap-start') {
         step.value = 0;
     } else if (step.value === incompleteCategories.value.length - 1) {
-        step.value = 'end';
-    } else if (step.value !== 'end') {
+        step.value = 'recap-end';
+    } else if (step.value !== 'recap-end') {
         step.value++;
     }
 };
 const previousStep = () => {
-    if (step.value === 'end') {
+    if (step.value === 'recap-end') {
         step.value = incompleteCategories.value.length - 1;
     } else if (step.value === 0) {
-        step.value = 'start';
-    } else if (step.value !== 'start') {
+        step.value = 'recap-start';
+    } else if (step.value === 'recap-start') {
+        step.value = 'setup';
+    } else if (step.value == 'setup') {
+        router.visit(route('suitcase.index'));
+    } else {
         step.value--;
     }
 };
 
-const step = ref<'start' | number | 'end'>('start');
+const step = ref<'setup' | 'recap-start' | number | 'recap-end'>('setup');
 
 const stepClothingInfos = computed(() => {
-    if (step.value === 'start' || step.value === 'end') {
+    if (
+        step.value === 'setup' ||
+        step.value === 'recap-start' ||
+        step.value === 'recap-end'
+    ) {
         return null;
     }
 
@@ -124,7 +147,6 @@ const stepClothingInfos = computed(() => {
         <template #header>
             <div class="mb-4 flex text-sm">
                 <button
-                    v-if="step !== 'start'"
                     @click="previousStep"
                     class="-m-2 flex items-center gap-1 p-2"
                 >
@@ -140,25 +162,6 @@ const stepClothingInfos = computed(() => {
                 </Link>
             </div>
 
-            <template v-if="step === 'start' || step === 'end'">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    {{ $t('faire_ma_valise') }}
-                </h2>
-
-                <VStretchedButton
-                    :href="route('suitcase.index')"
-                    :sr-text="$t('modifier_lorigine_ou_la_destination')"
-                >
-                    <div class="mt-2 flex items-center gap-2">
-                        <VTag>{{ originDressing.name }}</VTag>
-
-                        <ArrowRightIcon class="size-5" />
-
-                        <VTag>{{ destinationDressing.name }}</VTag>
-                    </div>
-                </VStretchedButton>
-            </template>
-
             <template v-if="stepClothingInfos">
                 <p class="text-sm text-neutral-500">
                     {{
@@ -166,6 +169,10 @@ const stepClothingInfos = computed(() => {
                             n: stepClothingInfos.step,
                             total: stepClothingInfos.totalSteps,
                         })
+                    }}
+                    -
+                    {{
+                        clothesCategories.nameFromId(stepClothingInfos.category)
                     }}
                 </p>
                 <h3 class="text-xl">
@@ -195,72 +202,118 @@ const stepClothingInfos = computed(() => {
                             )
                         }}
                     </p>
-                    <p class="mt-2">
+                    <p class="mt-2 font-bold">
                         {{
                             $t(
-                                'peuttre_que_tu_nas_pas_tout_ajout_sur_lapplication',
+                                'si_tous_tes_vtements_sont_bien_sur_lapplication_pr',
                             )
                         }}
                     </p>
                 </VAlert>
             </template>
+            <template v-else>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
+                    {{ $t('faire_ma_valise') }}
+                </h2>
+
+                <VStretchedButton
+                    :href="route('suitcase.index')"
+                    :sr-text="$t('modifier_lorigine_ou_la_destination')"
+                >
+                    <div class="mt-2 flex items-center gap-2">
+                        <DressingTag :dressing="originDressing" />
+
+                        <ArrowRightIcon class="size-5" />
+
+                        <DressingTag :dressing="destinationDressing" />
+                    </div>
+                </VStretchedButton>
+            </template>
         </template>
 
         <div class="mx-auto mt-auto flex w-full max-w-lg flex-col">
-            <template v-if="step === 'start'">
-                <VAlert
-                    v-if="percentageOfMinNotDefined === 100"
-                    type="warning"
-                    class="mb-4"
+            <template v-if="step === 'setup'">
+                <h3 class="text-xl">
+                    {{ $t('ce_quil_faut_l_o_tu_vas_auminimum') }}
+                </h3>
+
+                <div
+                    v-if="isEditingMinByCategory"
+                    class="mb-32 mt-4 flex flex-col gap-4"
                 >
-                    <p class="font-bold">
-                        {{ $t('tu_nas_pas_configur_de_minimum_par_catgorie') }}
-                    </p>
-                    <p class="mt-2">
-                        {{
-                            $t(
-                                'il_faut_que_tu_indique_combien_de_vtement_au_minim',
-                            )
-                        }}
-                    </p>
-                    <VButton
-                        small
-                        variant="warning"
-                        :href="route('dressings.edit', destinationDressing)"
-                        class="mt-2"
+                    <label
+                        class="flex items-center gap-2"
+                        v-for="{
+                            name,
+                            id,
+                        } in clothesCategories.allWithoutUncategorized"
                     >
-                        {{ $t('configurer_le_dressing') }}
-                    </VButton>
-                </VAlert>
-                <VAlert
-                    v-else-if="percentageOfMinNotDefined > 90"
-                    type="info"
-                    class="mb-4"
+                        <VNumberInput
+                            :min="0"
+                            v-model="clothesMinByCategory[id]"
+                        />
+                        <span>{{ name }}</span>
+                    </label>
+                </div>
+                <ul
+                    v-else
+                    class="mb-32 mt-4 list-inside list-disc space-y-2 pl-2"
                 >
-                    <p>
-                        {{
-                            $t(
-                                'tu_peux_configurer_le_minimum_de_vtement_pour_chaque',
-                            )
-                        }}
-                    </p>
-                    <VButton
-                        small
-                        variant="info"
-                        :href="route('dressings.edit', destinationDressing)"
-                        class="mt-2"
+                    <li
+                        v-for="{
+                            name,
+                            id,
+                        } in clothesCategories.allWithoutUncategorized"
                     >
-                        {{ $t('configurer_le_dressing') }}
-                    </VButton>
-                </VAlert>
+                        <span>{{ clothesMinByCategory[id] }} {{ name }}</span>
+                    </li>
+                </ul>
+
+                <div
+                    class="fixed bottom-0 left-0 flex w-full flex-col gap-2 rounded-t-2xl bg-white px-4 py-4 shadow-2xl"
+                >
+                    <template v-if="isEditingMinByCategory">
+                        <VButton variant="tertiary" @click="resetMinByCategory">
+                            <XMarkIcon class="size-5" />
+                            {{ $t('annuler') }}
+                        </VButton>
+                        <VButton variant="success" @click="saveMinByCategory">
+                            <CheckIcon class="size-5" />
+                            {{ $t('enregistrer') }}
+                        </VButton>
+                    </template>
+                    <template v-else>
+                        <VButton
+                            variant="secondary"
+                            @click="isEditingMinByCategory = true"
+                        >
+                            {{ $t('modifier_pour_cette_foisci') }}
+                            <PencilIcon class="size-5" />
+                        </VButton>
+
+                        <VButton @click="nextStep">
+                            {{ $t('continuer_avec_a') }}
+                            <ArrowRightIcon class="size-5" />
+                        </VButton>
+                    </template>
+                </div>
+            </template>
+            <template v-else-if="step === 'recap-start'">
                 <template v-if="incompleteCategories.length">
                     <h3 class="text-xl">
                         {{ $t('ce_quil_faut_mettre_dans_ta_valise') }}
                     </h3>
 
-                    <ul
-                        class="mt-4 list-inside list-disc space-y-2 rounded-lg bg-neutral-50 px-4 py-2"
-                    >
+                    <p
+                        class="mt-2"
+                        v-html="
+                            $t(
+                                'selon_le_minimum_par_catgorie_que_tu_as_configur_i',
+                            )
+                        "
+                    ></p>
+
+                    <ul class="mt-4 list-inside list-disc space-y-2 pl-2">
                         <li v-for="category in incompleteCategories">
                             <span
                                 :class="
@@ -301,7 +354,7 @@ const stepClothingInfos = computed(() => {
                     </h3>
 
                     <ul
-                        class="mt-4 list-inside list-disc space-y-2 rounded-lg bg-neutral-50 px-4 py-2"
+                        class="mt-4 list-inside list-disc space-y-2 pl-2"
                         v-if="
                             Object.entries(clothesCountByCategoryInDestination)
                                 .length
@@ -329,9 +382,9 @@ const stepClothingInfos = computed(() => {
                     </VButton>
                 </template>
             </template>
-            <template v-else-if="step === 'end'">
+            <template v-else-if="step === 'recap-end'">
                 <h3 class="mt-auto text-xl">
-                    {{ $t('ce_quil_doit_y_avoir_dans_ta_valise') }}
+                    {{ $t('ce_quil_y_a_dans_ta_valise') }}
                 </h3>
 
                 <ul class="ms-1 mt-2 list-inside list-disc">
@@ -349,7 +402,7 @@ const stepClothingInfos = computed(() => {
                 </ul>
 
                 <VButton class="mt-4" @click="send">
-                    {{ $t('jai_fini_ma_valise') }}
+                    {{ $t('terminer_la_valise') }}
                     <CheckIcon class="size-5" />
                 </VButton>
             </template>
