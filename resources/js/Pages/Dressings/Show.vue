@@ -6,14 +6,21 @@ import ClothingDetails from '@/Components/Clothing/ClothingDetails.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import { useClothesCategories } from '@/composables/useClothesCategories';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ClothingDto, DressingDto } from '@/types/generated';
+import {
+    ClothesCategoryDto,
+    ClothingDto,
+    DressingDto,
+} from '@/types/generated';
 import { PencilIcon, PlusIcon } from '@heroicons/vue/24/outline';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const props = defineProps<{
     dressing: DressingDto;
-    clothesByCategory: Record<number, Array<ClothingDto>>;
+    clothesByCategory: Array<{
+        category: ClothesCategoryDto;
+        clothes: Array<ClothingDto>;
+    }>;
 }>();
 
 const selectedClothing = ref<ClothingDto | null>(null);
@@ -46,10 +53,10 @@ const clothesCategories = useClothesCategories();
 
         <section
             class="mt-4"
-            v-for="(clothes, categoryId) in clothesByCategory"
+            v-for="{ category, clothes } in clothesByCategory"
         >
             <h3 class="text-xl">
-                {{ clothesCategories.nameFromId(categoryId) }} ({{
+                {{ clothesCategories.nameFromId(category.id) }} ({{
                     clothes.length
                 }})
             </h3>

@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function clothesCategories(): HasMany
     {
-        return $this->hasMany(ClothesCategory::class);
+        return $this->hasMany(ClothesCategory::class)->orderBy('order');
     }
 
     public function uncategorizedClothesCategory(): ClothesCategory

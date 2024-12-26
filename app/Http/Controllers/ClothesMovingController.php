@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Dtos\ClothesCategoryDto;
 use App\Dtos\ClothingDto;
 use App\Dtos\DressingDto;
 use App\Dtos\FlashMessageDto;
 use App\Http\Requests\Clothing\MoveClothesRequest;
+use App\Models\ClothesCategory;
 use App\Models\Dressing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,7 +31,12 @@ class ClothesMovingController extends Controller
         return Inertia::render('Clothing/Move/Create', [
             'originDressing' => DressingDto::from($origin),
             'destinationDressing' => DressingDto::from($destination),
-            'clothesByCategory' => ClothingDto::collect($origin->clothes)->groupBy('clothes_category_id'),
+            'clothesByCategory' => $origin->user->clothesCategories->map(function (ClothesCategory $clothesCategory) use ($origin) {
+                return [
+                    'category' => ClothesCategoryDto::from($clothesCategory),
+                    'clothes' => ClothingDto::collect($clothesCategory->clothes()->where('dressing_id', $origin->id)->get()),
+                ];
+            }),
         ]);
     }
 

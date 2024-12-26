@@ -10,28 +10,28 @@ export const useClothesCategories = () => {
     const translatedName = (name?: string) =>
         !name || name === 'uncategorized' ? UNCATEGORIZED_TRANSLATION : name;
 
-    const allArray = Object.entries(page.props.clothesCategories ?? {}).map(
-        ([id, name]) => [id, translatedName(name)],
-    ) as Array<[string, string]>;
-    const allArrayWithoutUncategorized = allArray.filter(
-        ([id, name]) => name !== UNCATEGORIZED_TRANSLATION,
+    const all = (page.props.clothesCategories ?? []).map((category) => ({
+        ...category,
+        name: translatedName(category.name),
+    }));
+
+    const allWithoutUncategorized = all.filter(
+        (category) => category.name !== UNCATEGORIZED_TRANSLATION,
     );
 
-    const all = Object.fromEntries(allArray);
-    const allWithoutUncategorized = Object.fromEntries(
-        allArrayWithoutUncategorized,
-    );
+    const categoryFromId = (categoryId?: number) =>
+        categoryId ? all.find(({ id }) => id === categoryId) : undefined;
 
     const nameFromId = (categoryId?: number) =>
-        translatedName(all[categoryId ?? '-1']);
+        translatedName(categoryFromId(categoryId)?.name);
 
-    const options = allArray.map(([id, name]) => ({
-        value: Number.parseInt(id),
+    const options = all.map(({ id, name }) => ({
+        value: id,
         label: name,
     }));
-    const optionsWithoutUncategorized = allArrayWithoutUncategorized.map(
-        ([id, name]) => ({
-            value: Number.parseInt(id),
+    const optionsWithoutUncategorized = allWithoutUncategorized.map(
+        ({ id, name }) => ({
+            value: id,
             label: name,
         }),
     );

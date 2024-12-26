@@ -1,5 +1,5 @@
 import { t } from '@/app';
-import { FlashMessageDto } from '@/types/generated';
+import { ClothesCategoryDto, FlashMessageDto } from '@/types/generated';
 import { PageProps as InertiaPageProps } from '@inertiajs/core';
 import { AxiosInstance } from 'axios';
 import { route as ziggyRoute } from 'ziggy-js';
@@ -27,7 +27,7 @@ declare module 'vue' {
 
 declare module '@inertiajs/core' {
     interface PageProps extends InertiaPageProps, AppPageProps {
-        clothesCategories?: Record<number, string>;
+        clothesCategories?: Array<ClothesCategoryDto>;
         dressings?: Record<number, string>;
         flash: {
             success?: FlashMessageDto;

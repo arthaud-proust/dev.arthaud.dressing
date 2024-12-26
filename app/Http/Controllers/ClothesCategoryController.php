@@ -21,7 +21,7 @@ class ClothesCategoryController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('ClothesCategory/Index', [
-            'clothesCategories' => ClothesCategoryDto::collect($request->user()->clothesCategories()->exceptUncategorized()->latest()->get()),
+            'clothesCategories' => ClothesCategoryDto::collect($request->user()->clothesCategories()->exceptUncategorized()->orderBy('order')->get()),
         ]);
     }
 

@@ -17,7 +17,12 @@ class ClothesCategory extends Model
 
     protected $fillable = [
         'name',
+        'order',
         'user_id',
+    ];
+
+    protected $attributes = [
+        'order' => 0,
     ];
 
     protected static function booted(): void

@@ -6,7 +6,11 @@ import ClothingCard from '@/Components/Clothing/ClothingCard.vue';
 import VPageHeader from '@/Components/VPageHeader.vue';
 import { useClothesCategories } from '@/composables/useClothesCategories';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ClothingDto, DressingDto } from '@/types/generated';
+import {
+    ClothesCategoryDto,
+    ClothingDto,
+    DressingDto,
+} from '@/types/generated';
 import { ArrowRightIcon, CheckIcon } from '@heroicons/vue/24/outline';
 import { Head, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -14,7 +18,10 @@ import { ref } from 'vue';
 const props = defineProps<{
     originDressing: DressingDto;
     destinationDressing: DressingDto;
-    clothesByCategory: Record<number, Array<ClothingDto>>;
+    clothesByCategory: Array<{
+        category: ClothesCategoryDto;
+        clothes: Array<ClothingDto>;
+    }>;
 }>();
 
 const clothesCategories = useClothesCategories();
@@ -79,10 +86,10 @@ const send = () => {
 
         <section
             class="mt-4"
-            v-for="(clothes, categoryId) in clothesByCategory"
+            v-for="{ category, clothes } in clothesByCategory"
         >
             <h3 class="text-xl">
-                {{ clothesCategories.nameFromId(categoryId) }} ({{
+                {{ clothesCategories.nameFromId(category.id) }} ({{
                     clothes.length
                 }})
             </h3>

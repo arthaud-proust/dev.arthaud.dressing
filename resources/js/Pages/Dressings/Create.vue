@@ -16,7 +16,7 @@ const form = useForm({
     name: '',
     color: DressingColor.AMBER,
     clothesMinByCategory: Object.fromEntries(
-        Object.keys(clothesCategories.all).map((id) => [id, 0]),
+        clothesCategories.all.map(({ id }) => [id, 0]),
     ),
 });
 
@@ -64,15 +64,16 @@ const submit = () => {
 
                 <div class="mt-4 grid grid-cols-2 gap-2">
                     <div
-                        v-for="(
-                            name, categoryId
-                        ) in clothesCategories.allWithoutUncategorized"
+                        v-for="{
+                            name,
+                            id,
+                        } in clothesCategories.allWithoutUncategorized"
                     >
                         <label>{{ name }}</label>
                         <VNumberInput
                             class="w-full"
                             :min="0"
-                            v-model="form.clothesMinByCategory[categoryId]"
+                            v-model="form.clothesMinByCategory[id]"
                         />
                     </div>
                 </div>

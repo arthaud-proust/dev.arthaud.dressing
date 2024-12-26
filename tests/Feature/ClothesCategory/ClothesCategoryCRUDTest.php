@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Clothing;
+namespace Tests\Feature\ClothesCategory;
 
 use App\Models\ClothesCategory;
 use App\Models\ClothesCategoryRequirement;

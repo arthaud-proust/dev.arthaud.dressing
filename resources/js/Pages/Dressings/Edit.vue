@@ -89,15 +89,16 @@ const closeModal = () => {
 
                 <div class="mt-4 grid grid-cols-2 gap-2">
                     <div
-                        v-for="(
-                            name, categoryId
-                        ) in clothesCategories.allWithoutUncategorized"
+                        v-for="{
+                            name,
+                            id,
+                        } in clothesCategories.allWithoutUncategorized"
                     >
                         <label class="text-sm">{{ name }}</label>
                         <VNumberInput
                             class="w-full"
                             :min="0"
-                            v-model="form.clothesMinByCategory[categoryId]"
+                            v-model="form.clothesMinByCategory[id]"
                         />
                     </div>
                 </div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\DressingController;
 use App\Http\Controllers\MoveClothingController;
 use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReorderClothesCategoriesController;
 use App\Http\Controllers\SuitcaseGuideController;
 use App\Http\Controllers\UX\StartParcoursController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+    Route::post('/clothes-categories/reorder', ReorderClothesCategoriesController::class)->name('clothes-categories.reorder');
     Route::resource('clothes-categories', ClothesCategoryController::class);
 
     Route::resource('dressings', DressingController::class)->except('index');

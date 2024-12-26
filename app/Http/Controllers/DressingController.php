@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Dtos\ClothesCategoryDto;
 use App\Dtos\ClothingDto;
 use App\Dtos\DressingDto;
 use App\Dtos\FlashMessageDto;
 use App\Http\Requests\StoreDressingRequest;
 use App\Http\Requests\UpdateDressingRequest;
+use App\Models\ClothesCategory;
 use App\Models\Dressing;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -47,7 +49,12 @@ class DressingController extends Controller
 
         return Inertia::render('Dressings/Show', [
             'dressing' => DressingDto::from($dressing),
-            'clothesByCategory' => ClothingDto::collect($dressing->clothes)->groupBy('clothes_category_id'),
+            'clothesByCategory' => $dressing->user->clothesCategories->map(function (ClothesCategory $clothesCategory) use ($dressing) {
+                return [
+                    'category' => ClothesCategoryDto::from($clothesCategory),
+                    'clothes' => ClothingDto::collect($clothesCategory->clothes()->where('dressing_id', $dressing->id)->get()),
+                ];
+            }),
         ]);
     }
 
